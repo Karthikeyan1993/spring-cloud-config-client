@@ -31,7 +31,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         if (userProfileRepository.findUserProfileByUsername(request.getUsername()) != null)
             throw new UsernameExistException();
 
-        if (userProfileRepository.findUserProfileByEmail(request.getEmail())!=null) throw new EmailExistException();
+        if (userProfileRepository.findUserProfileByEmail(request.getEmail()) != null) throw new EmailExistException();
 
         UserProfile profile = UserProfile.builder()
                 .username(request.getUsername())
@@ -40,5 +40,6 @@ public class UserProfileServiceImpl implements UserProfileService {
                 .isActive(false)
                 .build();
         this.userProfileRepository.save(profile);
+        LOGGER.info("UserProfile Created for {}",request.getUsername());
     }
 }
