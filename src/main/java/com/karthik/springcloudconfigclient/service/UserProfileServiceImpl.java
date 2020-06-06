@@ -3,13 +3,16 @@ package com.karthik.springcloudconfigclient.service;
 import com.karthik.springcloudconfigclient.model.UserProfile;
 import com.karthik.springcloudconfigclient.payload.SignUpRequest;
 import com.karthik.springcloudconfigclient.repository.UserProfileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class UserProfileServiceImpl implements UserProfileService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileServiceImpl.class);
     private final UserProfileRepository userProfileRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -20,7 +23,8 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public UserProfile save(SignUpRequest request) {
+    public UserProfile signUp(SignUpRequest request) {
+        LOGGER.info("New UserProfile Request Received At : {}", new Date());
         UserProfile profile = new UserProfile();
         profile.setUsername(request.getUsername());
         profile.setEmail(request.getEmail());

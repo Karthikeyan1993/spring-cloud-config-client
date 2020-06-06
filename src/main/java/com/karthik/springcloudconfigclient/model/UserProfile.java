@@ -22,5 +22,5 @@ public class UserProfile {
     private String username;
     private String email;
     private String password;
-    private Boolean isActive;
+    private Boolean isActive = false;
 }
