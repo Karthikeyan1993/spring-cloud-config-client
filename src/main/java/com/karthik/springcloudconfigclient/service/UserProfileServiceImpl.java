@@ -1,5 +1,7 @@
 package com.karthik.springcloudconfigclient.service;
 
+import com.karthik.springcloudconfigclient.exception.EmailExistException;
+import com.karthik.springcloudconfigclient.exception.UsernameExistException;
 import com.karthik.springcloudconfigclient.model.UserProfile;
 import com.karthik.springcloudconfigclient.payload.SignUpRequest;
 import com.karthik.springcloudconfigclient.repository.UserProfileRepository;
@@ -23,12 +25,20 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    public UserProfile signUp(SignUpRequest request) {
+    public void signUp(SignUpRequest request) {
         LOGGER.info("New UserProfile Request Received At : {}", new Date());
-        UserProfile profile = new UserProfile();
-        profile.setUsername(request.getUsername());
-        profile.setEmail(request.getEmail());
-        profile.setPassword(this.passwordEncoder.encode(request.getPassword()));
-        return this.userProfileRepository.save(profile);
+
+        if (userProfileRepository.findUserProfileByUsername(request.getUsername()) != null)
+            throw new UsernameExistException();
+
+        if (userProfileRepository.findUserProfileByEmail(request.getEmail())!=null) throw new EmailExistException();
+
+        UserProfile profile = UserProfile.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .isActive(false)
+                .build();
+        this.userProfileRepository.save(profile);
     }
 }

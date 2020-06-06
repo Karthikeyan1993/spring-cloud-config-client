@@ -1,7 +1,9 @@
 package com.karthik.springcloudconfigclient.model;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +12,9 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +23,5 @@ public class UserProfile {
     private String username;
     private String email;
     private String password;
-    private Boolean isActive = false;
+    private Boolean isActive;
 }
