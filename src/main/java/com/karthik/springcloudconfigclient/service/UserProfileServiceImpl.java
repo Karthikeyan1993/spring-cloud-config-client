@@ -7,6 +7,7 @@ import com.karthik.springcloudconfigclient.payload.SignUpRequest;
 import com.karthik.springcloudconfigclient.repository.UserProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -41,5 +42,13 @@ public class UserProfileServiceImpl implements UserProfileService {
                 .build();
         this.userProfileRepository.save(profile);
         LOGGER.info("UserProfile Created for {}",request.getUsername());
+    }
+
+    @Override
+    public UserProfile findByUsernameOrEmail(String username, String email) {
+        UserProfile userProfile = this.userProfileRepository
+                .findUserProfileByUsernameOrEmail(username,email)
+                .orElseThrow(() -> new UsernameNotFoundException("Supplied Username Not Found"));
+        return userProfile;
     }
 }
