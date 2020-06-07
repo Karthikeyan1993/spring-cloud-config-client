@@ -1,7 +1,7 @@
 package com.karthik.springcloudconfigclient.exception;
 
 public class UsernameExistException extends RuntimeException {
-    public UsernameExistException(){
+    public UsernameExistException() {
         super("Supplied Username Already Exist");
     }
 }

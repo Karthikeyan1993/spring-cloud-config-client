@@ -29,4 +29,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .build();
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler({JwtTokenMissingException.class})
+    public ResponseEntity<Object> handleJwtTokenMissingException(JwtTokenMissingException e) {
+        ErrorResponse response = ErrorResponse.builder()
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .timestamp(new Date())
+                .message(e.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(response);
+    }
 }

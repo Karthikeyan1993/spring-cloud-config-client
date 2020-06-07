@@ -43,6 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public SecurityAuthenticationFilter geSecurityAuthenticationFilter(){
+        return new SecurityAuthenticationFilter();
+    }
+
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -73,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/v1/**")
                 .authenticated();
-        httpSecurity.addFilterBefore(new SecurityAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(geSecurityAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

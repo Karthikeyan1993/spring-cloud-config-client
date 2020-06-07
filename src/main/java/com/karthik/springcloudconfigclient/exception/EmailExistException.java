@@ -1,7 +1,7 @@
 package com.karthik.springcloudconfigclient.exception;
 
 public class EmailExistException extends RuntimeException {
-    public EmailExistException(){
+    public EmailExistException() {
         super("Supplied Email Already Exist");
     }
 }

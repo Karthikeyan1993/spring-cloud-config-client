@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Component
 public class UserProfileServiceImpl implements UserProfileService {
@@ -80,9 +79,4 @@ public class UserProfileServiceImpl implements UserProfileService {
         return response;
     }
 
-    @Override
-    public Optional<UserProfile> findByUsernameOrEmail(String username, String email) {
-        return this.userProfileRepository
-                .findUserProfileByUsernameOrEmail(username, email);
-    }
 }
