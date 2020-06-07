@@ -1,11 +1,11 @@
-package com.karthik.springcloudconfigclient.payload;
+package com.karthik.springcloudconfigclient.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class SignInRequest {
+public class LoginRequest {
     private String username;
     private String password;
 }

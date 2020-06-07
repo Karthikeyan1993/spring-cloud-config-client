@@ -1,15 +1,11 @@
 package com.karthik.springcloudconfigclient.controller;
 
-import com.karthik.springcloudconfigclient.payload.SignInRequest;
-import com.karthik.springcloudconfigclient.payload.SignUpRequest;
+import com.karthik.springcloudconfigclient.payload.request.LoginRequest;
+import com.karthik.springcloudconfigclient.payload.response.SecurityJwtTokenResponse;
+import com.karthik.springcloudconfigclient.payload.request.UserProfileRequest;
 import com.karthik.springcloudconfigclient.service.UserProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,23 +16,17 @@ public class AuthController {
 
     private final UserProfileService userProfileService;
 
-    private final AuthenticationManager authenticationManager;
-
-    public AuthController(UserProfileService userProfileService, AuthenticationManager authenticationManager) {
+    public AuthController(UserProfileService userProfileService) {
         this.userProfileService = userProfileService;
-        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("sign-up")
-    public void signUp(@RequestBody SignUpRequest signUpRequest) {
-        this.userProfileService.signUp(signUpRequest);
+    public void signUp(@RequestBody UserProfileRequest userProfileRequest) {
+        this.userProfileService.signUp(userProfileRequest);
     }
 
     @PostMapping("sign-in")
-    public void signIn(@RequestBody SignInRequest signInRequest){
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(),signInRequest.getPassword()));
-        SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
+    public SecurityJwtTokenResponse signIn(@RequestBody LoginRequest loginRequest) {
+        return this.userProfileService.signIn(loginRequest);
     }
 }

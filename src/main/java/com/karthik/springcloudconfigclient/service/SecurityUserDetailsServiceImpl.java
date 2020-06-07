@@ -1,4 +1,4 @@
-package com.karthik.springcloudconfigclient.security;
+package com.karthik.springcloudconfigclient.service;
 
 import com.karthik.springcloudconfigclient.model.UserProfile;
 import com.karthik.springcloudconfigclient.repository.UserProfileRepository;
@@ -12,18 +12,18 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class SecurityUserDetailsServiceImpl implements SecurityUserDetailsService {
 
     private final UserProfileRepository userProfileRepository;
 
-    public UserDetailsServiceImpl(UserProfileRepository userProfileRepository) {
+    public SecurityUserDetailsServiceImpl(UserProfileRepository userProfileRepository) {
         this.userProfileRepository = userProfileRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         UserProfile userProfile = this.userProfileRepository
-                .findUserProfileByUsernameOrEmail(s,s)
+                .findUserProfileByUsernameOrEmail(s, s)
                 .orElseThrow(() -> new UsernameNotFoundException("Supplied Username Not Found"));
 
         User user = (User) User.builder()

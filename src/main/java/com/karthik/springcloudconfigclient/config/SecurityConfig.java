@@ -1,8 +1,10 @@
 package com.karthik.springcloudconfigclient.config;
 
 import com.karthik.springcloudconfigclient.security.SecurityAuthenticationEntryPoint;
-import com.karthik.springcloudconfigclient.service.SecurityAuthenticationFilter;
-import com.karthik.springcloudconfigclient.security.UserDetailsServiceImpl;
+import com.karthik.springcloudconfigclient.security.SecurityAuthenticationFilter;
+import com.karthik.springcloudconfigclient.service.SecurityUserDetailsService;
+import com.karthik.springcloudconfigclient.service.SecurityUserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,11 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SecurityAuthenticationEntryPoint unauthorizedHandler;
 
-    private final UserDetailsServiceImpl userDetailsService;
+    private final SecurityUserDetailsService securityUserDetailsService;
 
-    public SecurityConfig(SecurityAuthenticationEntryPoint unauthorizedHandler, UserDetailsServiceImpl userDetailsService) {
+
+    public SecurityConfig(SecurityAuthenticationEntryPoint unauthorizedHandler, SecurityUserDetailsService securityUserDetailsService) {
         this.unauthorizedHandler = unauthorizedHandler;
-        this.userDetailsService = userDetailsService;
+        this.securityUserDetailsService = securityUserDetailsService;
     }
 
     @Bean
@@ -48,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(this.userDetailsService)
+                .userDetailsService(this.securityUserDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -69,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/v1/**")
                 .authenticated();
-        httpSecurity.addFilter(new SecurityAuthenticationFilter());
+        httpSecurity.addFilterBefore(new SecurityAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
